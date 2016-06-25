@@ -7,15 +7,40 @@
 //
 
 import UIKit
+import Parse 
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate{
 
     var window: UIWindow?
+    
+    
+    
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        Parse.initializeWithConfiguration(
+            ParseClientConfiguration(block: { (configuration:ParseMutableClientConfiguration) -> Void in
+                configuration.applicationId = "Parsetagram"
+                configuration.clientKey = "myMasterKey"  // set to nil assuming you have not set clientKey
+                configuration.server = "https://morning-peak-31524.herokuapp.com/parse"
+                })
+            )
+    
+        
+        if PFUser.currentUser() != nil {
+            // if there is a logged in user then load the home view controller
+            window = UIWindow(frame: UIScreen.mainScreen().bounds)
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let loginViewController = storyboard.instantiateViewControllerWithIdentifier("MainTabBarController")
+            window?.rootViewController = loginViewController
+            window?.makeKeyAndVisible()
+        }
+ 
+        
+            
+            
         return true
     }
 
